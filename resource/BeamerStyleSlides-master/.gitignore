@@ -1,0 +1,12 @@
+.DS_Store
+~$*.pptx
+slides.aux
+slides.log
+slides.toc
+slides.snm
+slides.out
+slides.nav
+exports
+preview/*.pdf
+covers.jpg
+*.synctex.gz

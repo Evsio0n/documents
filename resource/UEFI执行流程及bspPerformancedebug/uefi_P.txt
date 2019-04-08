@@ -1,0 +1,472 @@
+﻿re Boot: Off
+S - Boot Config @ 0x00786070 = 0x000001c1
+S - JTAG ID @ 0x00786130 = 0x000ac0e1
+S - OEM ID @ 0x00786138 = 0x00000000
+S - Serial Number @ 0x00784138 = 0xcd2bcd5b
+S - OEM Config Row 0 @ 0x00784188 = 0x0000000000000000
+S - OEM Config Row 1 @ 0x00784190 = 0x0000000000000000
+S - Feature Config Row 0 @ 0x007841a0 = 0x0070302012400300
+S - Feature Config Row 1 @ 0x007841a8 = 0x0000000000000820
+S - Core 0 Frequency, 3952 MHz
+S - PBL Patch Ver: 4
+S - I-cache: On
+S - D-cache: On
+B -         0 - PBL, Start
+B -      7114 - bootable_media_detect_entry, Start
+B -    135758 - bootable_media_detect_success, Start
+B -    135764 - elf_loader_entry, Start
+B -    137445 - auth_hash_seg_entry, Start
+B -    137780 - auth_hash_seg_exit, Start
+B -    189261 - elf_segs_hash_verify_entry, Start
+B -    238916 - elf_segs_hash_verify_exit, Start
+B -    238929 - auth_xbl_sec_hash_seg_entry, Start
+B -    268084 - auth_xbl_sec_hash_seg_exit, Start
+B -    268086 - xbl_sec_segs_hash_verify_entry, Start
+B -    274847 - xbl_sec_segs_hash_verify_exit, Start
+B -    274894 - PBL, End
+B -    301340 - SBL1, Start
+B -    304664 - usb: hs_phy_nondrive_start
+B -    305000 - usb: hs_phy_nondrive_finish
+B -    305030 - boot_flash_init, Start
+D -        30 - boot_flash_init, Delta
+B -    305061 - sbl1_ddr_set_default_params, Start
+D -       152 - sbl1_ddr_set_default_params, Delta
+B -    305213 - boot_config_data_table_init, Start
+B -    324825 - Using default CDT
+D -     19611 - boot_config_data_table_init, Delta - (0 Bytes)
+B -    324855 - CDT Version:3,Platform ID:8,Major ID:1,Minor ID:0,Subtype:0
+B -    324855 - Image Load, Start
+D -       671 - Auth Metadata
+D -       458 - Segments hash check
+D -      4972 - PMIC Image Loaded, Delta - (34272 Bytes)
+B -    329827 - pm_device_init, Start
+B -    331596 - PM: 0x1210: 00
+B -    331596 - PM: battery present
+B -    332114 - PM: PON REASON: PM0=0x8000028000000001:0x0 PM1=0x8000088000000020:0x0 
+B -    372984 - PM: SET_VAL:Skip
+D -     44072 - pm_device_init, Delta
+B -    373899 - pm_driver_init, Start
+B -    377620 - PM: OCP Clearing for L4A is Skipped :PM660 is not supported the LDO4
+D -      4056 - pm_driver_init, Delta
+B -    377956 - pm_sbl_chg_init, Start
+B -    380182 - PM: Trigger FG IMA Reset
+B -    380396 - PM: Trigger FG IMA Reset.Completed
+B -    381677 - PM: EntryVbat: 4313; EntrySOC: -1
+B -    381768 - PM: BATT TEMP: 28 DegC
+D -      3995 - pm_sbl_chg_init, Delta
+B -    381982 - vsense_init, Start
+D -         0 - vsense_init, Delta
+B -    429623 - Pre_DDR_clock_init, Start
+D -       396 - Pre_DDR_clock_init, Delta
+D -         0 - sbl1_ddr_set_params, Delta
+B -    435265 - DSF version = 35.0, DSF RPM version = 22.0
+B -    435265 - Max Frequency = 1296 MHz,  platform_id = 0x3007
+B -    435387 - do_ddr_training, Start
+B -    442341 - Bootup frequency set to 1296000
+D -      7045 - do_ddr_training, Delta
+B -    457347 - ddr_mfr = 0xff
+B -    457347 - ddr_type = 0x7
+B -    457378 - ddr_size = 0x1000 MB
+B -    469395 - clock_init, Start
+D -       305 - clock_init, Delta
+B -    470127 - Image Load, Start
+D -         0 - APDP Image Loaded, Delta - (0 Bytes)
+B -    470188 - usb: EMMC Serial - af7320
+B -    470249 - usb: fedl, vbus_low
+B -    472963 - PM: 0: PON=0x1:HARD_RESET: ON=0x80:PON_SEQ: POFF=0x2:PS_HOLD: OFF=0x80:POFF_SEQ
+B -    473055 - PM: 1: PON=0x20:PON1: ON=0x80:PON_SEQ: POFF=0x8:GP1: OFF=0x80:POFF_SEQ
+B -    473085 - PM: SMEM Chgr Info Write Success
+B -    473177 - sbl1_efs_handle_cookies, Start
+D -       579 - sbl1_efs_handle_cookies, Delta
+B -    473848 - Image Load, Start
+D -      2775 - Auth Metadata
+D -      1068 - Segments hash check
+D -      6527 - QSEE Dev Config Image Loaded, Delta - (42024 Bytes)
+B -    480405 - Image Load, Start
+D -       518 - SEC Image Loaded, Delta - (4096 Bytes)
+B -    480924 - Image Load, Start
+D -     21472 - Auth Metadata
+D -     18270 - Segments hash check
+D -     61762 - QSEE Image Loaded, Delta - (1945112 Bytes)
+B -    542717 - Image Load, Start
+D -      2776 - Auth Metadata
+D -      3050 - Segments hash check
+D -     10675 - QHEE Image Loaded, Delta - (273136 Bytes)
+B -    553453 - Image Load, Start
+D -      2867 - Auth Metadata
+D -      2196 - Segments hash check
+D -     11407 - RPM Image Loaded, Delta - (219340 Bytes)
+B -    565348 - Image Load, Start
+D -        30 - STI Image Loaded, Delta - (0 Bytes)
+B -    565836 - Image Load, Start
+D -      2806 - Auth Metadata
+D -      3324 - Segments hash check
+D -     11559 - ABL Image Loaded, Delta - (379472 Bytes)
+B -    577456 - Image Load, Start
+D -      3386 - Auth Metadata
+D -     13939 - Segments hash check
+D -     29280 - APPSBL Image Loaded, Delta - (1792000 Bytes)
+B -    607133 - SBL1, End
+D -    305823 - SBL1, Delta
+S - Flash Throughput, 80000 KB/s  (4694664 Bytes,  58271 us)
+S - DDR Frequency, 1296 MHz
+
+
+UEFI Start     [  757] SEC
+PROD Mode   : Off
+DEBUG Mode : On
+ASLR        : On
+Timer Delta : +7 mS
+RAM Entry 0 : Base 0x0000000080000000  Size 0x0000000080000000
+RAM Entry 1 : Base 0x0000000100000000  Size 0x000000007E3C0000
+SraPrSLbnt: SerialPortBuffer=0x9FFF7000, PortBufferSize=32768, EnQPtr=0x9FFF70EB
+CONF File   : uefiplatLA.cfg
+UEFI Ver    : 4.2.180915.BOOT.XF.1.4-00258-S660LZB-1
+Build Info  : 64b Sep 15 2018 16:39:17
+Boot Device : eMMC
+ - 0x09C3DC000 [  837] DxeCore.efi
+Loading DxeCore at 0x009C3DC000 EntryPoint=0x009C3DD840
+HOBLIST address in DXE = 0x9C1CD018
+FV Hob            0x9FC00000 - 0x9FDB57FF
+FV Hob            0x9CBD3000 - 0x9D382C7F
+FV2 Hob           0x9CBD3000 - 0x9D382C7F
+ - 0x09C379000 [  846] EnvDxe.efi
+ - 0x09C371000 [  847] ReportStatusCodeRouterRuntimeDxe.efi
+ - 0x09C368000 [  847] StatusCodeHandlerRuntimeDxe.efi
+ - 0x09BB36000 [  848] RuntimeDxe.efi
+ - 0x09C358000 [  848] ArmCpuDxe.efi
+ - 0x09C350000 [  849] ArmGicDxe.efi
+ - 0x09C349000 [  859] ArmTimerDxe.efi
+ - 0x09C342000 [  860] WatchdogTimer.efi
+ - 0x09C328000 [  860] SecurityDxe.efi
+ - 0x09C31F000 [  860] ASN1X509Dxe.efi
+ - 0x09C316000 [  861] SecRSADxe.efi
+ - 0x09C2F9000 [  861] VerifiedBootDxe.efi
+ - 0x09C2F1000 [  861] SmemDxe.efi
+ - 0x09C2C9000 [  862] DALSys.efi
+ - 0x09C2C1000 [  862] HWIODxeDriver.efi
+ - 0x09C2B8000 [  863] ChipInfo.efi
+ - 0x09C2B1000 [  863] PlatformInfoDxeDriver.efi
+ - 0x09C2AA000 [  864] MetronomeDxe.efi
+ - 0x09C29E000 [  864] GlinkDxe.efi
+ - 0x09C28B000 [  864] ULogDxe.efi
+ - 0x09C272000 [  865] NpaDxe.efi
+ - 0x09C254000 [  865] ClockDxe.efi
+DALLOG Device [0x2000145]: Cannot turn on source[ACPL] that hasn't been configured.
+ - 0x09C24C000 [  875] DiskIoDxe.efi
+ - 0x09C241000 [  876] PartitionDxe.efi
+ - 0x09BAC8000 [  876] SdccDxe.efi
+ - 0x09C22B000 [  902] UFSDxe.efi
+ - 0x09C21C000 [  902] Fat.efi
+ - 0x09C215000 [  903] EnglishDxe.efi
+ - 0x09C20B000 [  903] FvSimpleFileSystem.efi
+ - 0x09C1FE000 [  904] QdssDxe.efi
+ - 0x09BA39000 [  904] EmuVariableRuntimeDxe.efi
+ - 0x09BA32000 [  904] EmbeddedMonotonicCounter.efi
+ - 0x09BA27000 [  905] ResetRuntimeDxe.efi
+ - 0x09BA1F000 [  905] RealTimeClock.efi
+ - 0x09C1F5000 [  906] PrintDxe.efi
+ - 0x09C1E3000 [  906] DevicePathDxe.efi
+ - 0x09BA09000 [  907] CapsuleRuntimeDxe.efi
+ - 0x09B9C8000 [  907] HiiDatabase.efi
+ - 0x09C1DA000 [  908] FontDxe.efi
+ - 0x09B935000 [  913] QcomBds.efi
+ - 0x09B9BF000 [  914] DALTLMM.efi
+ - 0x09B9A5000 [  914] I2C.efi
+ - 0x09B988000 [  915] SPMI.efi
+ - 0x09B97D000 [  916] SPI.efi
+ - 0x09B8D3000 [  916] FIHDxe.efi
+fih_fac_rd: fac mode read buf_size 8 size 4096 ok 
+fih_fus_rd: fus mode read buf_size 8 size 4096 ok 
+Partition backup from bspdata to deviceinfo
+fih_backup_init: pid size = (16, 0)
+fih_backup_init: bt mac size = (12, 0)
+fih_backup_init: wifi mac size = (6, 0)
+fih_mem_init: manufacture id = 255
+fih_mem_init: type = 7
+fih_mem_init: size = 4096 MB
+fih_cert_init Start!!! 
+fih_wallpaper_rd: read buf_size 8 size 4096 ok 
+fih_haptics_init 
+fih_splash_init: current splash
+ - 0x09B848000 [  926] PmicDxe.efi
+ - 0x09B968000 [  931] AdcDxe.efi
+ - 0x09B81D000 [  932] QcomChargerDxeLA.efi
+XBL FIH_HWID=0x351
+fih_hwcfg_mapping
+find perfect swcfg in swid table
+-------------------------------------
+swcfg table.hwid = [0x351]
+swcfg table.project = [3]
+swcfg table.hw_rev = [50]
+swcfg table.rf = [22]
+swcfg table.bsp = [1]
+swcfg table.dtm = [4]
+swcfg table.dtn = [2]
+swcfg table.sim = [2]
+swcfg table.project_name = [PL2]
+swcfg table.factory_name = [P2A]
+swcfg table.phase_sw = [5.0]
+swcfg table.phase_hw = [MP]
+swcfg table.sku_name = [APAC]
+swcfg table.rf_band = [G_850_900_1800_1900^W_1_2_5_8^L_1_3_5_7_8_20_28_38_40_41]
+swcfg table.pcba_description = []
+-------------------------------------
+Neither DSDS or SSSS found in e2p.simconfig, use default fih_swid_table.sim 2
+Load CHARGER_CFG_FILE_IN_FV_C1N_PL2  
+ Locate SCM Protocol failed, Status =  (0xE)
+Mounting FAT Volume: logfs
+ Locate SCM Protocol failed, Status =  (0xE)
+PmicDxe:: PmicFgSram_VerifySramContent FgUnUsedData = 0x0 
+PmicDxe:: PmicFgSram_SramHealthy SRAM contents are good 
+ - 0x09B4F6000 [ 1032] UsbfnDwc3Dxe.efi
+ - 0x09B4E8000 [ 1032] UsbConfigDxe.efi
+typec_port_status (0x0, 0x30)
+UsbConfigPortsQueryConnectionChange: USB Type-C Device Mode(UFP mode)
+cc_out_sts 0x1  dfp_curr_adv 0x4  ufp_conn_type 0x7  vbus_sts 0x0  vbus_err_sts 0x0  debounce_done_sts 0x0  vconn_oc_sts 0x0  ccout_out_hiz_sts 0x0
+HandlePortPartnerXtach: Cable Attach
+UpdateLaneNumber: LaneNum = 0
+ - 0x09C1D3000 [ 1033] SimpleTextInOutSerial.efi
+ - 0x09B514000 [ 1034] ConPlatformDxe.efi
+ - 0x09B4CF000 [ 1034] ConSplitterDxe.efi
+ - 0x09B4C4000 [ 1035] GraphicsConsoleDxe.efi
+ - 0x09B51C000 [ 1035] ButtonsDxe.efi
+ - 0x09B50D000 [ 1036] TsensDxe.efi
+ - 0x09B3E3000 [ 1037] DisplayDxe.efi
+
+ ->EnumeratePartitions: 1038 ms
+GetActiveSlot_MDP Is_active_b 0
+
+ ->GetVarPartition: 1038 ms
+in the check_zplash_head S: 1308 ms
+fih_zplash_head: miss magic 1344 ms
+MDP_DataPartitionInit: read zpalsh head slot_A fail
+
+ check_zplash_head E: 1344 ms
+
+ check_zplash_unit S: 1344 ms
+fih_zplash_unit: miss magic 1406 ms
+
+ check_zplash_unit E: 1406 ms
+MDP_DataPartitionInit: read zpalsh unit slot_A fail
+xbl get MDP_SPLASH is splash_a
+Setvariable returned Success
+MDPLib : SetClockFreqHz: Clock "mmss_mdss_axi_clk" to 240000000Hz returned an error!
+XBL FIH_HWID=0x351
+Neither DSDS or SSSS found in e2p.simconfig, use default fih_swid_table.sim 2
+[HL]MDPPlatformConfigure(): uProjectValue = 3, eDisplayId = 0
+[JasonSH]MDPPlatformConfigure(): FIH_SWID_PRJ_PL2
+[HL]MDPPlatformConfigure(): sPanelPowerCtrl.ePMICSecondaryPower[eDisplayId] = 8
+[JasonSH]PlatformClientInit(): PMIC_NPA_GROUP_ID_DISP_PRIM_PL2
+[JasonSH]Panel_CDP_PeripheralPower(): MDP_PMIC_MODULE_CONTROLTYPE_PM_PL2
+Enable LCM IOVDD enable pin for PL2 project
+start power up for PL2 project
+FIH_ProjectID = 0x3
+FIH_LCDID gpio = 12
+FIH_LCDID GPIO_12 = 1
+FIH_LCDID = 0x1
+[JasonSH]MDPPlatformConfigure(): FIH_SWID_PRJ_PL2
+[JasonSH]Panel_CDP_Reset(): default
+BossVee Reset HLT panel
+[JasonSH]MDPPlatformConfigure(): uPanelID = 0x888800
+Succeed to find matched panel id! Panel id = 39
+FIH_ProjectID = 0x3
+FIH_LCDID gpio = 12
+FIH_LCDID GPIO_12 = 1
+FIH_LCDID = 0x1
+fih_lcdid_value is 1 and set for HLT panel params 
+DisplayDxe: Panel ID:0x00000000 (detection time: 35ms) [LCD] 
+HDR is Not Alive. Not Add String!
+DALLOG Device [0x2000145]: Unable to turn ON clock: ms_dspl0ckms_pmpl0ckms_dspl1ckms_pmpl1ckms_dsrtckms_pmrtckms_dsvycckms_icsm_h_l
+[JasonSH]Panel_CDP_Reset(): default
+BossVee Reset HLT panel
+Render Splash  [ 1727]
+EnvDxe Render Callback
+ - 0x09B462000 [ 1728] TzDxe.efi
+Mounting FAT Volume: tzapps
+AppReg Init:7 mS
+LoadSecureApps: Load app from partition(keymaster): Status = 0x0, AppId = 65537
+ - 0x09B47C000 [ 1836] LimitsDxe.efi
+APC1 IDDQ WC 0 , L2:0, CPU[0]:175, CPU[1]:175, CPU[2]:175, CPU[3]:175
+ APC1 Total 700
+ - 0x09B445000 [ 1836] MdtpDxe.efi
+ - 0x09AC4F000 [ 1837] HashDxe.efi
+ - 0x09B475000 [ 1837] RngDxe.efi
+ - 0x09B453000 [ 1838] MpPowerDxe.efi
+ - 0x09AC6B000 [ 1838] ChargerExDxe.efi
+ - 0x09AC34000 [ 1839] UsbMsdDxe.efi
+ - 0x09AC28000 [ 1839] UsbDeviceDxe.efi
+-----------------------------
+Platform Init  [ 1891] BDS
+UEFI Ver   : 4.2.180915.BOOT.XF.1.4-00258-S660LZB-1
+Platform   : MTP
+Chip Name  : SDM630
+Chip Ver   : 1.0
+Core 0 Freq: 1670400 MHz
+Mounting FAT Volume: logfs
+-----------------------------
+ - 0x09A9D4000 [ 1910] QcomChargerApp.efi
+Load BATTERY_PROVISION_PATH_C1N_PL2  
+PmicDxe: Battery Name = (2959512_FIH_C1_3000mAh_averaged_MasterSlave_Jun22nd2017) 
+PmicDxe: Battery Name = (3042552_FIH_PL2_Coslight_3000mAh_averaged_MasterSlave_Aug14th2017) 
+PmicDxe: Battery Name = (3170543_FIH_PLT2xf_3000mAh_averaged_MasterSlave_Nov7th2017) 
+XBL FIH_HWID=0x351
+Neither DSDS or SSSS found in e2p.simconfig, use default fih_swid_table.sim 2
+ - 0x09A99E000 [ 1931] FIHHWIDApp.efi
+XBL FIH_HWID=0x351
+Neither DSDS or SSSS found in e2p.simconfig, use default fih_swid_table.sim 2
+ManufacturingMode = 0
+ManufacturingCable = 0
+ptr_mdm_smem->host_ftm_magic = 0x0
+UEFI Total : 1176 ms
+POST Time      [ 1933] OS Loader
+ - 0x09A65C000 [ 1936] LinuxLoader.efi
+Loader Build Info: Sep 11 2018 11:34:01
+PMIC_POFF: off:0x00000080, reason1:0x00000002, fault1:0x00000000, fault2:0x00000000, s3reset:0x00000000
+fih_pon=0x00000001 (C) HW_RESET
+fih_poff=0x00008002 PS_HOLD POFF_SEQ
+fih_rere=0x00000022 KERN_RST
+fih_pon=0x00000001 (C) HW_RESET
+fih_rere=0x00000022 KERN_RST
+JudgeEnterMode rere = 0x22, pon = 0x1, poff = 0x8002
+USBStatus = 0
+fih_vib_ctrl_ERM
+fih_vib_voltage_erm: voltage 3248
+pm_haptics_config_haptics_rate Status = Success
+fih_lcm: color=0xFFFFFF
+draminfo: MICRON LPDDR4x 4096MB
+fih_rere=0x00000022 KERN_RST
+dramtest: none
+VB: RWDeviceState: Succeed using devinfo!
+fih_emmc: MICRON 64 GB
+fih_fver_ab_init: Multi Slot boot is supported, CurrentSlot = _a
+fih_fver_ab_init: SysteminfoSlot = systeminfo_a
+-----------------------------
+check_1 ...
+is valid
+-----------------------------
+check_2 ...
+is invalid
+-----------------------------
+check_3 ...
+Multi Slot boot is supported, CurrentSlot = _a
+is valid
+-----------------------------
+Have_Permission: !!!!!!count < 0!!!!
+FIH_Permission: NO permission!
+fih_bat: 100 (4322)
+INFO: No need to check GPIO_3
+BootReason = 0x22
+Boot reason: 0x22 not handled, defaulting to Normal Boot
+VB: RWDeviceState: Succeed using devinfo!
+fih_lock_init: unlocked
+fih_lock_init() is_unlocked = 1
+fih_lock_init() is_tampered = 0
+Recovery command: 32 bootonce-bootloader
+typec_port_status (0x0, 0x20)
+UsbConfigPortsQueryConnectionChange: USB Type-C Device Mode(None)
+cc_out_sts 0x1  dfp_curr_adv 0x4  ufp_conn_type 0x7  vbus_sts 0x0  vbus_err_sts 0x0  debounce_done_sts 0x0  vconn_oc_sts 0x0  ccout_out_hiz_sts 0x0
+HandlePortPartnerXtach: Cable Detach
+FIH_USB: IsFTMCable = FALSE
+Multi Slot boot is supported
+Dcin Valid = 0
+fih_pon=0x00000001 (C) HW_RESET
+fih_pon_check [0x1],[0x1]
+Booting Into Mission Mode
+Booting from slot (_a)
+boot-up from partition name = boot_a
+Booting from slot (_a)
+typec_port_status (0x0, 0x30)
+UsbConfigPortsQueryConnectionChange: USB Type-C Device Mode(UFP mode)
+cc_out_sts 0x1  dfp_curr_adv 0x4  ufp_conn_type 0x7  vbus_sts 0x0  vbus_err_sts 0x0  debounce_done_sts 0x0  vconn_oc_sts 0x0  ccout_out_hiz_sts 0x0
+HandlePortPartnerXtach: Cable Attach
+UpdateLaneNumber: LaneNum = 0
+Loading Image Start : 3030 ms
+Loading Image Done : 3030 ms
+Total Image Read size : 512 Bytes
+Loading Image Start : 3030 ms
+Loading Image Done : 3258 ms
+Total Image Read size : 38936576 Bytes
+No dtbo partition is found, Skip dtbo
+VB: DeviceInit: Device is unlocked! Skipping verification!
+VB: VerifyImage: Image verification done! boot state is: ORANGE
+VB:VerifyImage time spent: 0 mS
+System Path -  root=/dev/mmcblk0p81 
+fih_menu: ong
+fih_lock_exit() is_tampered = 1
+fih_mem_exit and set mem address ACA803E0
+No Ffbm cookie found, ignore: Not Found
+Memory Base Address: 0x80000000
+Decompressing kernel image start: 8306 ms
+Decompressing kernel image done: 8654 ms
+BootLinux: failed to get dtbo image
+fih_board_swid_init: proj = 3
+fih_board_swid_init: dtm = 4
+fih_board_swid_init: dtn = 2
+fih_board_swid_init: 1 fih_board_swid = 0x342
+Delete don't fit DTB entry 318/00000008/0x00000000/0/1001B/101011A/0/0/9892E45D/4BB39
+Best match DTB tags 318/00000008/0x00000000/0/1001B/101011A/0/0/(offset)0x9878F49B/(size)0x0004BD38, [0x320]
+Using pmic info 0x1001B/0x101011A/0x0/0x0 for device 0x1011B/0x102001A/0x0/0x0
+Memory Base Address: 0x80000000
+fih_wallpaper_rd: read buf_size 8 size 4096 ok 
+UpdateCmdLine: id_size = 1
+BootMode = 0x0
+fih_fus_mode, modem is 0.
+fih_fuar_mode, modem is 0.
+Image partition size: 8388608 Bytes
+CMDLINE: box partition size = 8388608
+CMDLINE: bset diag = 0x0
+fih_pon=0x00000001 (C) HW_RESET
+fih_wallpaper_rd: read buf_size 8 size 4096 ok 
+!!! CmdLineLen/Max: 1239/1536
+fih_fus_mode, modem is 0.
+UpdateCmdLineParams: cmd length=1250 
+Cmdline: console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_l
+RAM Partitions
+Add Base: 0x0000000080000000 Available Length: 0x0000000080000000 
+Add Base: 0x0000000100000000 Available Length: 0x000000007E3C0000 
+WARNING: Could not find mem-offline node.
+fih-apr,poweroncause=0x00000001
+fih-apr,poweroffcause=0x00008002
+fih-apr,rebootreason=0x00000022
+pid=[PL2GAMU831929470]
+bt_mac=[A0:28:ED:76:19:EE]
+wifi_mac=[A0:28:ED:75:FA:AE]
+INFO: No need modify resense dtsi
+kaslr-Seed is added to chosen node
+
+Shutting Down UEFI Boot Services: 8810 ms
+
+ -> MDPExitBoot: 8816 ms
+isReboot:0x0
+MDP_PANEL_FLAG_DISABLE_SEAMLESS_SPLASH:0x1000000
+pPrimaryDisplayInfo->eDisplayFlags:0x0
+
+ ->MDP_DataPartitionExit S: 8817 ms
+
+ ->SaveVariables S : 8817 ms
+
+ ->check_multi_header S: 8817 ms
+
+ check_multi_header S: 8817 ms
+check_multi_header: size_splash 37748736
+check_multi_header: ReadDisk Pass
+in the check_zplash_head S: 9051 ms
+fih_zplash_head: miss magic 9302 ms
+MDP_DataPartitionInit: read zpalsh head fail
+
+ check_zplash_unit S: 9302 ms
+fih_zplash_unit: miss magic 9620 ms
+MDP_DataPartitionInit: read zpalsh unit fail
+
+ check_multi_header E: 9620 ms
+
+ ->check_multi_header E: 9620 ms
+
+ ->SaveVariables E: 9626 ms
+
+ ->MDP_DataPartitionExit E: 9626 ms
+
+ -> MDPExitBoot: 9626 ms
+App Log Flush : 1 ms
+Exit BS        [ 9632] UEFI End

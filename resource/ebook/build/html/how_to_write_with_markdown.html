@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="haobo.gao">
+  <title>Ebook User's Guide \ how to</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">Ebook User's Guide \ how to</h1>
+<p class="author">haobo.gao</p>
+<p class="date">2019-04-03 20:59:58</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#介绍">介绍</a><ul>
+<li><a href="#什么是-tex-什么是latex">什么是 Tex ,什么是LaTeX</a><ul>
+<li><a href="#tex-vs-word">Tex VS <strong>Word</strong></a></li>
+<li><a href="#latex主要用户">LaTeX主要用户</a></li>
+</ul></li>
+<li><a href="#什么是markdown">什么是markdown</a></li>
+<li><a href="#pandoc">Pandoc</a><ul>
+<li><a href="#支持转换的文档类型图">支持转换的文档类型图</a></li>
+</ul></li>
+<li><a href="#本套方案">本套方案</a></li>
+</ul></li>
+<li><a href="#使用latex">使用LaTeX</a></li>
+<li><a href="#使用markdown">使用markdown</a></li>
+<li><a href="#用pandoc">用Pandoc</a></li>
+<li><a href="#怎么写博客">怎么写博客</a><ul>
+<li><a href="#markdown-语法验证">1. markdown 语法验证</a><ul>
+<li><a href="#自动生成目录">1.1 自动生成目录</a></li>
+<li><a href="#加粗">1.2 加粗</a></li>
+<li><a href="#italic">1.3 Italic</a></li>
+<li><a href="#引用块">1.4 引用块</a></li>
+<li><a href="#list-item">1.5 list &amp; item</a><ul>
+<li><a href="#item">1.5.1 item</a></li>
+</ul></li>
+<li><a href="#code-block">1.6 code block</a></li>
+</ul></li>
+<li><a href="#博客sop">2. 博客sop</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="介绍">介绍</h1>
+<p>或许你们已经习惯用 office 的三件套来编写文档。 这里要介绍另外的排版工具tex.以及一种标记语言markdown.</p>
+<h2 id="什么是-tex-什么是latex">什么是 Tex ,什么是LaTeX</h2>
+<p>TeX 是一个排版系统。用 TeX，你可以把你的文章做成书那种效果。你可以把它打印出来，或者送到出版社投稿。TeX 非常适合用来写学术论文和书籍. 我们接下来说到的LaTeX 建立在 TeX 之上。</p>
+<p>世界上只有一个TeX程序，它就叫做 &quot;tex&quot;, 它是由 D. E. Knuth 设计并且实现的。TeX 不仅是一个排版程序，而且是一种程序语言。LaTeX 就是用这种语言写成的一个“TeX 宏包”，它扩展了 TeX 的功能，使我们很方便的逻辑的进行创作而不是专心于字体，缩进这些烦人的东西。TeX 还有其它的大型宏包，它们和 LaTeX 一起都被叫做 &quot;format&quot;，现在还有一种常用的format叫做 ConTeXt, 用它能方便的作出漂亮的幻灯片，动态屏幕文档…… 我们通常用 TeX 都是在用 LaTeX, ConTeXt, 因为 TeX 的底层需要更多的知识才能了解，一般人不需要自己设计自己的格式。</p>
+<h3 id="tex-vs-word">Tex VS <strong>Word</strong></h3>
+<p><strong>Word</strong> 是“字处理程序”(word processor) , 它们是“所见即所得(WYSIWYG)”的，你直接修改字体，颜色，用鼠标画出表格…… 马上就可以看到效果。屏幕上显示出来是什么效果， 印出来基本上就是那个效果。</p>
+<p>而 <strong>TeX</strong> 不是，你输入的都是文本文件，需要一个程序(当然就是tex了)处理之后才能得到一个排版后的结果。</p>
+<p>Word 这样所见即所得的程序写科技论文是很累的。这会使你的脑 子总是想着专业排版人员考虑的问题，比如 “这个单词使用什 么字体呢？”，“这行应该缩进多少呢？” 这样就没有什么时 间用来思考语言和内容了。所以 TeX 被设计为“WYTIWYG （所 想即所得）”。</p>
+<p>用TeX写文章，他想的是 “这一段是否应该属于上一节呢？”， “这句话跟我这章的主题符合吗？”，“是否应该开始新的一章 呢？”，“这个概念读者是否容易理解呢？”…… 你告诉 TeX 的 是：“这是一章开始”，“这个单词应该强调”， “这里是一段 诗”……就像在对他的秘书口授机宜。而不是告诉她：“这是第3章， 应该用黑体三号字，开头有一个‘双S'，……”，“这个单词用斜 体楷体小四”， “左右缩进各一英寸，右边不要对齐，换用小一号 花体”……这些是秘书的事情，不用你操心。</p>
+<h3 id="latex主要用户">LaTeX主要用户</h3>
+<p>TeX 是最好的学术排版系统，它的用户基本上都是科学家和工程师，也就是最会偷懒的的那种人。用户的数目虽然少，但是很稳定。TeX 的用户一般集中在大学和科研机构里。比如，欧洲原子能研究中心(CERN)几百人都是 (La)TeX 用户，而且有专人把设计文档样式作为爱好。这样的气氛很好，大家可以轻轻松松得到样式统一的文档。而且多人合写论文，书籍是非常方便的。</p>
+<h2 id="什么是markdown">什么是markdown</h2>
+<p>Markdown是一种「标记语言」，通常为程序员群体所用。除此之外，Markdown也是国际杂志编辑以及许多写作者都广泛使用的标记语言。小源博客的所有文章也都是使用这一语言写成的。</p>
+<p>千万不要被「标记」、「语言」吓到，Markdown的语法十分简单，常用的标记符号不超过十个，用于日常写作记录绰绰有余，不到半小时就能完全掌握。</p>
+<p>但就是这十个不到的标记符号，却能让人优雅地沉浸式记录，专注内容而不是纠结排版，达到「心中无尘，码字入神」的境界。</p>
+<h2 id="pandoc">Pandoc</h2>
+<p>Pandoc是由John MacFarlane开发的标记语言转换工具，可实现不同标记语言间的格式转换，堪称该领域中的“瑞士军刀”[3]。Pandoc使用Haskell语言编写，以命令行形式实现与用户的交互，可支持多种操作系统；Pandoc采用GNU GPL授权协议发布，属于自由软件。</p>
+<h3 id="支持转换的文档类型图">支持转换的文档类型图</h3>
+<figure>
+<img src="img/pandocio.png" title="pandoc支持的转换图" alt="pandoc" /><figcaption>pandoc</figcaption>
+</figure>
+<h2 id="本套方案">本套方案</h2>
+<p>我书写这个manual 的　目的是推销目前这套方案: markdown</p>
+<h1 id="使用latex">使用LaTeX</h1>
+<h1 id="使用markdown">使用markdown</h1>
+<p><code>flow st=&gt;start: 开始 op=&gt;operation: My Operation cond=&gt;condition: Yes or No? e=&gt;end st-&gt;op-&gt;cond cond(yes)-&gt;e cond(no)-&gt;op &amp;</code></p>
+<table>
+<thead>
+<tr class="header">
+<th>First Header</th>
+<th>Second Header</th>
+<th>Third Header</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Content Cell</td>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr class="even">
+<td>Content Cell</td>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody>
+</table>
+<h1 id="用pandoc">用Pandoc</h1>
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<ul>
+<li><a href="#怎么写博客">怎么写博客</a>
+<ul>
+<li><a href="#1-markdown-语法验证">1. markdown 语法验证</a>
+<ul>
+<li><a href="#11-自动生成目录">1.1 自动生成目录</a></li>
+<li><a href="#12-加粗">1.2 加粗</a></li>
+<li><a href="#13-italic">1.3 Italic</a></li>
+<li><a href="#14-引用块">1.4 引用块</a></li>
+<li><a href="#15-list-item">1.5 list &amp; item</a>
+<ul>
+<li><a href="#151-item">1.5.1 item</a></li>
+</ul></li>
+<li><a href="#16-code-block">1.6 code block</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#include-stdioh">include &quot;stdio.h&quot;</a>
+<ul>
+<li><a href="#2-博客sop">2. 博客sop</a></li>
+</ul></li>
+</ul>
+<!-- /TOC -->
+<h1 id="怎么写博客">怎么写博客</h1>
+<p>这是我的第一个blog ，这篇博客的目的是</p>
+<h2 id="markdown-语法验证">1. markdown 语法验证</h2>
+<h3 id="自动生成目录">1.1 自动生成目录</h3>
+<p>在atom 中 生成。</p>
+<h3 id="加粗">1.2 加粗</h3>
+<p>我喜欢 <strong>粗体</strong></p>
+<p>我喜欢 <strong>粗体</strong></p>
+<p>I love <strong>bold text</strong>.</p>
+<p><strong><em>Important</em></strong> text</p>
+<p>text.</p>
+<h3 id="italic">1.3 Italic</h3>
+<p>The <em>cat's meow</em> .</p>
+<p>The <em>cat's meow</em> .</p>
+<p>A<em>cat</em>meow</p>
+<h3 id="引用块">1.4 引用块</h3>
+<blockquote>
+<p>引用这是一个引用</p>
+</blockquote>
+<blockquote>
+<p>引用这是一个引用</p>
+<blockquote>
+<p>嵌套引用 - <strong>item</strong> 1 - <strong>item</strong> 2</p>
+</blockquote>
+</blockquote>
+<h3 id="list-item">1.5 list &amp; item</h3>
+<h4 id="item">1.5.1 item</h4>
+<ul>
+<li>item 1</li>
+</ul>
+<p>diyige</p>
+<ul>
+<li>item 2</li>
+</ul>
+<blockquote>
+<p>s</p>
+</blockquote>
+<ul>
+<li>item 3</li>
+</ul>
+<ol type="1">
+<li>first</li>
+<li>second</li>
+<li>ws</li>
+<li>a</li>
+<li>b</li>
+</ol>
+<h3 id="code-block">1.6 code block</h3>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include </span><span class="im">&quot;stdio.h&quot;</span>
+
+<span class="dt">int</span> main(<span class="dt">void</span>);</code></pre></div>
+<h2 id="博客sop">2. 博客sop</h2>
+</body>
+</html>
