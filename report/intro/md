@@ -1,0 +1,9 @@
+for i in "$*"; do
+    echo $i
+done
+rm out -rf
+mkdir out -p 
+xelatex  -output-directory=out $1
+xelatex  -output-directory=out $1
+mv out/*.pdf ./
+
