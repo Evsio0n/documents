@@ -61,3 +61,28 @@
 
 
 \subsection{UART}
+
+
+
+
+\subsection{测试例程逻辑}
+
+
+
+主从机代码均有 cmd\_handle 用于相应来自于串口的命令。
+
+
+这些命令有
+
+\subsubsection{begin 命令}
+
+ begin 当板子接收到来自于串口的begin 字串的时候：
+
+ \begin{itemize}
+   \item 1. 会去从零开始计算时间戳，并开始PWM 产生（主机）或者 捕获（从机），这点主机从机都一样。
+
+   \item 主机接收到begin 命令后， 会去给从机发送begin 字符串，然后 再开始 1 。
+
+   \item
+
+ \end{itemize}
