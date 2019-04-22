@@ -1,0 +1,70 @@
+\section{workflow}
+
+%------------------------------------------------
+\begin{frame}[fragile]{Demo工作流程:两个指令}
+
+\begin{enumerate}
+\item 主机，从机上电。 外设驱动初始化。从机启PWM 捕获状态，等待事件的发生。
+\item 主机在接收到PC的 "begin"指令的时候。
+  \begin{itemize}
+    \item a.先转发给从机
+    \item b. 开始 timer3 本地计数(local counter).
+    \item c. 开始使用timer2 产生PWM 波。
+  \end{itemize}
+\item 当从机接收到"begin" 指令,且从机的timer2 捕获到clk上的第一个上升沿。
+  \begin{itemize}
+    \item a.  timer3 本地计数(local counter).
+    \item b. 进入PWM 捕获同步状态。
+  \end{itemize}
+\item "report" 指令：
+\begin{itemize}
+  \item a. 主机接收到"report"指令后，上报自己的时间戳给PC。
+  \item b.从机接收到"report"指令后，上报自己的时间戳给主机，主机转发给PC。
+\end{itemize}
+
+\end{enumerate}
+
+
+\end{frame}
+
+
+
+
+%------------------------------------------------
+\begin{frame}[fragile]{Demo工作流程:同步细节}
+
+local\_tm\_t 为主从机代码中 描述时间的类型：
+\begin{lstlisting}
+typedef struct local_time_struct{
+ unsigned char sec:7;   //秒
+ unsigned char min:7;   //分
+ unsigned char hour:5;  //时
+ unsigned int  day;     //天
+ unsigned int  jiffies; //本地时间戳
+ unsigned int  jiffies_pwm;   //pwm 时间戳
+} local_tm_t;
+\end{lstlisting}
+
+
+\begin{itemize}
+  \item 主机使用timer2 产生的PWM 波 来作为同步信号，从机捕获pwm 上升沿。这个方波上升沿间隔固定且精确为4ms 或者 8ms,可以客制化，在方波的上升沿，会去触发jiffies\_pwm 累加。
+  \item 主从都使用timer3 每隔100us 产生一个中断，  在中断中 jiffies 累加，到10000（1s）超时进位。作为本地时钟。
+\end{itemize}
+
+\end{frame}
+
+
+
+
+%------------------------------------------------
+\begin{frame}[fragile]{Demo工作流程:同步细节}
+
+timer2 的时钟用于产生或捕获PWM ,这个时钟用于同步。
+
+timer3 的时钟仅用于小粒度的 时间戳 测量。
+
+对于从机来说，每捕获到一个上升沿 ，为了时间同步，需要强制使从机的jiffies归零，jiffies\_pwm增加一个捕获
+周期（4ms或者8ms）。
+
+
+\end{frame}
