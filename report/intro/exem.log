@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2018.11.3)  10 APR 2019 20:23
+This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2019.4.1)  10 APR 2019 21:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2455,19 +2455,27 @@ File: logo-uha/logo.png Graphic file (type bmp)
  [11
 
 ]
-Underfull \vbox (badness 10000) detected at line 159
+\openout4 = `exem.vrb'.
+
+ (./exem.vrb)
+File: logo-uha/logo.png Graphic file (type bmp)
+<logo-uha/logo.png>
+ [12
+
+]
+Underfull \vbox (badness 10000) detected at line 182
  []
 
 
-Overfull \hbox (17.77802pt too wide) in paragraph at lines 159--159
+Overfull \hbox (17.77802pt too wide) in paragraph at lines 182--182
  [][]  
  []
 
 
-Overfull \vbox (16.6666pt too high) detected at line 159
+Overfull \vbox (16.6666pt too high) detected at line 182
  []
 
-[12
+[13
 
 ]
 \openout4 = `exem.vrb'.
@@ -2475,17 +2483,42 @@ Overfull \vbox (16.6666pt too high) detected at line 159
  (./exem.vrb)
 File: logo-uha/logo.png Graphic file (type bmp)
 <logo-uha/logo.png>
- [13
-
-]
-File: logo-uha/logo.png Graphic file (type bmp)
-<logo-uha/logo.png>
  [14
 
 ]
+\openout4 = `exem.vrb'.
+
+ (./exem.vrb)
 File: logo-uha/logo.png Graphic file (type bmp)
 <logo-uha/logo.png>
  [15
+
+]
+\openout4 = `exem.vrb'.
+
+ (./exem.vrb)
+File: logo-uha/logo.png Graphic file (type bmp)
+<logo-uha/logo.png>
+ [16
+
+]
+\openout4 = `exem.vrb'.
+
+ (./exem.vrb)
+File: logo-uha/logo.png Graphic file (type bmp)
+<logo-uha/logo.png>
+
+[17
+
+]
+File: logo-uha/logo.png Graphic file (type bmp)
+<logo-uha/logo.png>
+ [18
+
+]
+File: logo-uha/logo.png Graphic file (type bmp)
+<logo-uha/logo.png>
+ [19
 
 ]
 \tf@nav=\write6
@@ -2497,23 +2530,23 @@ File: logo-uha/logo.png Graphic file (type bmp)
 \tf@snm=\write8
 \openout8 = `exem.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 214.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 214.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 267.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 267.
  (./exem.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 214.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 214.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 267.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 267.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 45291 strings out of 493007
- 929619 string characters out of 6136719
- 1046620 words of memory out of 5000000
- 48500 multiletter control sequences out of 15000+600000
- 575268 words of font info for 72 fonts, out of 8000000 for 9000
+ 45292 strings out of 493007
+ 929756 string characters out of 6136720
+ 1046619 words of memory out of 5000000
+ 48494 multiletter control sequences out of 15000+600000
+ 575260 words of font info for 71 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  60i,12n,105p,10445b,1208s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on exem.pdf (15 pages).
+Output written on exem.pdf (19 pages).

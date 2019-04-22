@@ -1,12 +1,4 @@
-\frametitle{Typographie}
-\begin{lstlisting}
- 前面不能有空格？
-\end{lstlisting}
+\frametitle{上层应用： C\# 和 JAVA }
 
-item：
-\begin{itemize}
-\item 1
-\item 2
-\item 3
-\end{itemize}
+C\#
 
