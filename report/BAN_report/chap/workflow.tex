@@ -4,7 +4,7 @@
 \begin{frame}[fragile]{Demo工作流程:两个指令}
 
 \begin{enumerate}
-\item 主机，从机上电。 外设驱动初始化。从机启PWM 捕获状态，等待事件的发生。
+\item 主机，从机上电。 外设驱动初始化。从机进入PWM 捕获状态，等待事件的发生。
 \item 主机在接收到PC的 "begin"指令的时候。
   \begin{itemize}
     \item a.先转发给从机
@@ -23,6 +23,25 @@
 \end{itemize}
 
 \end{enumerate}
+
+
+\end{frame}
+
+
+
+
+%------------------------------------------------
+\begin{frame}[fragile]{定时器的应用}
+
+主从机中：
+\begin{itemize}
+  \item timer2 的时钟产生或捕获PWM ,用于同步。是BAN系统中的大粒度（8ms）时钟。
+  \item timer3 的时钟仅用于小粒度(100us)的 时间戳 测量。
+\end{itemize}
+
+
+对于从机来说，每捕获到一个上升沿 ，为了时间同步，需要强制使从机的jiffies，jiffies\_pwm增加一个捕获
+周期（8ms）。
 
 
 \end{frame}
@@ -55,16 +74,51 @@ typedef struct local_time_struct{
 
 
 
+%------------------------------------------------
+\begin{frame}[fragile]{从机上升沿捕获中断}
+
+tick\_sync 每隔 8ms 会被调用一次 ，用于同步本地时间戳：
+\begin{lstlisting}
+/* every 8ms 80*100us  */
+void tick_sync(void)
+{
+  if( dev.local_tm.jiffies_pwm + 80 < 10000  ){
+  dev.local_tm.jiffies_pwm = dev.local_tm.jiffies_pwm  + 80;
+  }
+  if( dev.local_tm.jiffies_pwm + 80 >= 10000  ){
+    dev.evt.sec_need_update=1;
+    dev.local_tm.jiffies_pwm = 80 - (10000 - dev.local_tm.jiffies_pwm);
+  }
+  //同步
+  dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//强等 同步
+}
+\end{lstlisting}
+
+\end{frame}
+
+
 
 %------------------------------------------------
-\begin{frame}[fragile]{Demo工作流程:同步细节}
+\begin{frame}[fragile]{本地计数超时处理}
 
-timer2 的时钟用于产生或捕获PWM ,这个时钟用于同步。
+tick\_sync 每隔 100us 会被调用一次 ，用于小粒度计数：
+\begin{lstlisting}
+/*
+  每100us 进入这个中断一次。
+*/
+void Tick(void)
+{
+  dev.local_tm.jiffies ++;
+  if( dev.local_tm.jiffies % 80 == 0){
+   //GPIO A5 产生 方波 用于和 同步线的方波做对比
+   HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1-HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_5));
+ }
+  /* one second passed */
+  if(dev.local_tm.jiffies >= 10000 ){
+   dev.local_tm.jiffies  = 0;
+ }
+}
+\end{lstlisting}
 
-timer3 的时钟仅用于小粒度的 时间戳 测量。
-
-对于从机来说，每捕获到一个上升沿 ，为了时间同步，需要强制使从机的jiffies归零，jiffies\_pwm增加一个捕获
-周期（4ms或者8ms）。
-
-
+这里 从机的GPIOA5 有相对于 时钟同步线的方波输出。 是一个测试点。
 \end{frame}
