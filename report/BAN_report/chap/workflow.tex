@@ -1,6 +1,36 @@
 \section{workflow}
 
 %------------------------------------------------
+%------------------------------------------------
+\begin{frame}[fragile]{Demo workflow: two instructions}
+
+\begin{enumerate}
+\item Master and Slave Power on。 Peripheral Driver Initialization,Slave enters the rising edge capture state and waits for an rising edge coming.
+\item When Master receives  "begin" instruction from PC.
+  \begin{itemize}
+    \item a.Forward to Slave first.
+    \item b. start  timer3 for  MLCC(Master Local Clock Counter).
+    \item c.  start timer2 to Generating Pulse Square Wave for synchronous。
+  \end{itemize}
+\item When Slave receives the "begin" instruction from Master, and Slave captures the first rising edge of SYNC\_CLK:
+  \begin{itemize}
+    \item a.  start  timer3 for  SLCC(Slave Local Clock Counter).
+    \item b. Continue to capture the rising edge.
+
+  \end{itemize}
+\item "report" instructions:
+\begin{itemize}
+  \item a.when Master receives the "report" instruction and reports its own timestamp(MLCC) to PC.
+  \item b.when Slave receives the "report" instruction, reports its own timestamp(SLCC) to Master, and Master forwards it to PC.
+
+\end{itemize}
+
+\end{enumerate}
+
+
+\end{frame}
+
+
 \begin{frame}[fragile]{Demo工作流程:两个指令}
 
 \begin{enumerate}

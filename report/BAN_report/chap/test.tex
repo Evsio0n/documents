@@ -280,7 +280,7 @@ dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//强等使 同步
 
   \begin{figure}[htbp]
   \begin{center}
-  \includegraphics[width=5cm]{img/delay}
+  \includegraphics[width=10cm]{img/delay}
   \caption{report jiffies}
   \label{report}
   \end{center}
@@ -296,8 +296,7 @@ dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//强等使 同步
 %------------------------------------------------
 \begin{frame}[fragile]{总结}
 
-串口的数据传输会产生 一些延迟（尽管发送时无阻塞发送，在中断中接收，直接读寄存器）。串口传输耗时
-在一个停止位，无检验位，的情况下 每字节传输耗时 =  baudrate/10bit. 本例中我们使用的baudrate是115200*2。
+串口的数据传输会产生 一些延迟（尽管发送时无阻塞发送，在中断中接收，直接读寄存器）。 本例中我们使用的baudrate是115200*2。
 
 纯软件的CRC 校验 必然带来一定的延时，如果需要校验，在本项目中需要实现CRC硬件外设的驱动。
 

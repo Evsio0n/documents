@@ -1,5 +1,12 @@
 \part{driver}
 
+
+\chapter{Device Model}
+
+
+
+
+
 \chapter{uart}
 
 
@@ -7,6 +14,26 @@
 
 
 \chapter{I2C}
+Like all bus subsystems, the I2C subsystem is responsible for:
+\begin{itemize}
+\item Providing an API to implement I2C controller drivers
+\item Providing an API to implement I2C device drivers, in kernel space
+\item
+\item
+\end{itemize}
+
+▶
+▶ Providing an API to implement I2C device drivers, in user space
+▶ The core of the I2C subsystem is located in drivers/i2c/.
+▶ The I2C controller drivers are located in drivers/i2c/busses/.
+▶ The I2C device drivers are located throughout drivers/, depending on the type
+of device (ex: drivers/input/ for input devices).
+
+
+
+
+
+
 
 
 \chapter{LCD}

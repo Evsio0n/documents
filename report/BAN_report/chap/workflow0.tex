@@ -1,0 +1,95 @@
+\section{workflow}
+
+%------------------------------------------------
+\begin{frame}[fragile]{Demo workflow}
+
+\begin{enumerate}
+\item Master and Slave Power on。 Peripheral Driver Initialization
+\item The Master sends a synchronization command, when ensuring that the slave is online:
+  \begin{itemize}
+    \item a.start timer2 to Generating Pulse Square Wave for synchronous。
+    \item b. start  timer3 for  MLCC(Master Local Clock Counter).
+  \end{itemize}
+\item When Slave receives a synchronization command from Master, and Slave captures the first rising edge of SYNC\_CLK:
+  \begin{itemize}
+    \item a.  start  timer3 for  SLCC(Slave Local Clock Counter).
+    \item b. Continue to capture the rising edge.
+
+  \end{itemize}
+
+
+\end{enumerate}
+
+
+\end{frame}
+
+
+%------------------------------------------------
+\begin{frame}[fragile]{Demo Workflow: Synchronize details}
+
+local\_tm\_t is the type of time described in Master and Slave code:
+
+\begin{lstlisting}
+typedef struct local_time_struct{
+ unsigned char sec:7;   //second
+ unsigned char min:7;   //min
+ unsigned char hour:5;  //hour
+ unsigned int  day;     //day
+ unsigned int  jiffies; //LCC
+ unsigned int  jiffies_pwm;   //SYNC_CLK counter
+} local_tm_t;
+\end{lstlisting}
+
+
+
+\end{frame}
+
+
+
+%------------------------------------------------
+\begin{frame}[fragile]{Slave Rising Edge Capture Interrupt}
+
+tick\_sync is called every 8ms to synchronize the local timestamp:
+
+\begin{lstlisting}
+/* every 8ms 80*100us  */
+void tick_sync(void)
+{
+  if( dev.local_tm.jiffies_pwm + 80 < 10000  ){
+  dev.local_tm.jiffies_pwm = dev.local_tm.jiffies_pwm  + 80;
+  }
+  if( dev.local_tm.jiffies_pwm + 80 >= 10000  ){
+    dev.evt.sec_need_update=1;
+    dev.local_tm.jiffies_pwm = 80 - (10000 - dev.local_tm.jiffies_pwm);
+  }
+  dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//synchronous
+}
+\end{lstlisting}
+
+\end{frame}
+
+
+
+%------------------------------------------------
+\begin{frame}[fragile]{Synchronize details:test point}
+
+Enter this code  every 100us：
+\begin{lstlisting}
+/*
+ enter this code  every 100us。
+*/
+void Tick(void)
+{
+  dev.local_tm.jiffies ++;
+  if( dev.local_tm.jiffies % 80 == 0){
+   //GPIO A5 for compare.
+   HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1-HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_5));
+ }
+  /* one second passed */
+  if(dev.local_tm.jiffies >= 10000 ){
+   dev.local_tm.jiffies  = 0;
+ }
+}
+\end{lstlisting}
+Here the slave GPIOA5 has square wave output relative to the clock synchronization line. It's a test point.
+\end{frame}
