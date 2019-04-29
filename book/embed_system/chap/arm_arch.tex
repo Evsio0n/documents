@@ -1,1 +1,43 @@
 \part{arm arch}
+
+
+\chapter{imx6ull}
+
+
+\section{System Boot}
+
+
+
+\section{uboot}
+
+
+
+\subsection{uboot env}
+\begin{lstlisting}
+baudrate=115200
+board_name=MYS6ULL
+board_rev=14X14
+bootargs=console=ttymxc0,115200 ubi.mtd=4 root=ubi0:rootfs rootfstype=ubifs mtdparts=gpmi-nand:5m(boot),1m(env),8m(kernel),2m(dtb),-(rootfs)
+bootcmd=nand read ${loadaddr} 0x600000 0x800000;nand read ${fdt_addr} 0xe00000 0x200000;bootz ${loadaddr} - ${fdt_addr}
+bootcmd_mfg=run mfgtool_args;bootz ${loadaddr} ${initrd_addr} ${fdt_addr};
+bootdelay=3
+console=ttymxc0
+envflag=1
+ethact=FEC0
+ethaddr=ba:d1:4a:9c:4e:ce
+ethprime=FEC
+fdt_addr=0x83000000
+fdt_high=0xffffffff
+initrd_addr=0x83800000
+initrd_high=0xffffffff
+ipaddr=192.168.2.20
+loadaddr=0x80800000
+mfgtool_args=setenv bootargs console=${console},${baudrate} rdinit=/linuxrc g_mass_storage.stall=0 g_mass_storage.removable=1 g_mass_storage.file=/fat g_mass_storage.ro=1 g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF g_mass_storage.iSerialNumber="" mtdparts=gpmi-nand:5m(boot),1m(env),8m(kernel),2m(dtb),-(rootfs) clk_ignore_unused
+nand_erasesize=20000
+nand_oobsize=40
+nand_writesize=800
+panel=TFT43AB
+serverip=192.168.2.109
+servierip=192.168.2.109
+
+\end{lstlisting}
