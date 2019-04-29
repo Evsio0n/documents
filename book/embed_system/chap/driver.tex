@@ -4,6 +4,48 @@
 \chapter{Device Model}
 
 
+\chapter{ 从 I2C 的一个设备驱动展开来}
+
+
+我们从一个I2C 设备的驱动入手 。
+
+\section{驱动的注册}
+
+dw791x\_modinit是驱动的入口函数.
+late_initcall(dw791x_modinit);
+
+
+
+
+
+\section{kobject,Ksets,subsystem}
+
+\subsection{kobject}
+
+\begin{lstlisting}
+struct kobject {
+const char		*name;
+struct list_head	entry;
+struct kobject		*parent;
+struct kset		*kset;
+struct kobj_type	*ktype;
+struct kernfs_node	*sd; /* sysfs directory entry */
+struct kref		kref;
+#ifdef CONFIG_DEBUG_KOBJECT_RELEASE
+struct delayed_work	release;
+#endif
+unsigned int state_initialized:1;
+unsigned int state_in_sysfs:1;
+unsigned int state_add_uevent_sent:1;
+unsigned int state_remove_uevent_sent:1;
+unsigned int uevent_suppress:1;
+};
+\end{lstlisting}
+
+
+
+
+
 
 
 
@@ -18,15 +60,13 @@ Like all bus subsystems, the I2C subsystem is responsible for:
 \begin{itemize}
 \item Providing an API to implement I2C controller drivers
 \item Providing an API to implement I2C device drivers, in kernel space
-\item
+\item Providing an API to implement I2C device drivers, in user space
 \item
 \end{itemize}
+The core of the I2C subsystem is located in drivers/i2c/.
+The I2C controller drivers are located in drivers/i2c/busses/.
 
-▶
-▶ Providing an API to implement I2C device drivers, in user space
-▶ The core of the I2C subsystem is located in drivers/i2c/.
-▶ The I2C controller drivers are located in drivers/i2c/busses/.
-▶ The I2C device drivers are located throughout drivers/, depending on the type
+The I2C device drivers are located throughout drivers/, depending on the type
 of device (ex: drivers/input/ for input devices).
 
 
