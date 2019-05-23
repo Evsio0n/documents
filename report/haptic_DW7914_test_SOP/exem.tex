@@ -1,0 +1,66 @@
+\documentclass[10pt]{beamer}
+\usepackage{listings}
+\usetheme{uha}
+\usepackage{hyperref}
+\usepackage{indentfirst}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xeCJK}
+\usepackage[french,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{enumerate} %枚举宏包
+\usepackage{geometry}
+\usepackage{xcolor}
+\punctstyle{kaiming}
+
+\definecolor{mygray}{rgb}{0.3,0.3,0.3}
+\definecolor{codegreen}{rgb}{0.8,0.8,0.8}
+\title{Haptic DW7914}
+\subtitle{Demo Test SOP}
+\date{\today}
+
+\institute{Foxconn ZZDC SW}
+\author{ 高浩博 \\ Tel:86362 \\mail: hao-bo.gao@foxconn.com }
+\setmainfont{Times_New_Roman.ttf}
+\lstset{
+	numbers=left,
+	numberstyle=\tiny,
+	basicstyle=\scriptsize,
+	backgroundcolor= \color{gray},
+	keywordstyle=\color{blue!70},
+	breaklines=true,
+	breakautoindent=true,
+	breakindent=4em,
+	commentstyle=\color{codegreen},
+	frame=shadowbox,
+	escapeinside=``,
+	tabsize=4,
+	framextopmargin=1pt,framexbottommargin=1pt,abovecaptionskip=-1pt,belowcaptionskip=1pt,
+  xleftmargin=3em,xrightmargin=3em,
+	language=C
+}
+
+
+\begin{document}
+
+
+
+
+% Title page 标题页
+\begin{frame}[plain, noframenumbering]
+	\titlepage
+\end{frame}
+
+
+\include{chap/introduce}
+\include{chap/workflow}
+
+
+
+
+\end{document}

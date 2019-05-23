@@ -1,0 +1,17 @@
+\frametitle{操作节点 完成测试}
+
+在上个步骤中，每执行一次如下命令；
+\begin{lstlisting}
+echo  1 > /sys/class/leds/vibrator/go
+\end{lstlisting}
+都会使dw7914 驱动马达震动。
+
+
+
+
+
+
+
+
+至此 测试结束，谢谢帮助！
+
