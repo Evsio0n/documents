@@ -1,0 +1,220 @@
+<h1 id="introduce">Introduce</h1>
+<p><span> RS485 feature</span></p>
+<ul>
+<li><p>485 is Fully balanced</p></li>
+<li><p>485 handles multiple drivers and receivers</p></li>
+<li><p>Better common-mode noise rejection (-7 to +12Volts)</p></li>
+<li><p>Sensitivity of 200mV in receivers</p></li>
+<li><p>Drivers give up to 5 volts balanced output</p></li>
+<li><p>Can stand contention, driver shuts down by itself</p></li>
+<li><p>High input resistance (12K ohms)</p></li>
+<li><p>Hysteresis of 50 mv to overcome diff. noise</p></li>
+</ul>
+<div class="figure">
+<img src="img/485net" alt="485NET " width="188" />
+<p class="caption">485NET <span data-label="Overview"></span></p>
+</div>
+<p><span>The Principle of The BAN’s Clock Synchronization</span></p>
+<ul>
+<li><p>In order to synchronize the device clock, it is necessary to add a clock line between Master and Slave, where Master generates synchronous clock square wave.</p></li>
+</ul>
+<div class="figure">
+<img src="img/syncchart" alt="synchronous" width="226" />
+<p class="caption">synchronous<span data-label="Overview"></span></p>
+</div>
+<p><span>Our Design</span> We designed it like this：</p>
+<div class="figure">
+<img src="img/overview" alt="BAN " width="377" />
+<p class="caption">BAN <span data-label="Overview"></span></p>
+</div>
+<p><span>BUS</span></p>
+<ol>
+<li><p>Adding a clock line from RS485 to form the basic hardware circuit of BAN bus.</p></li>
+<li><p>The clock line is used to generate Millisecond-level pulses for clock synchronization.Later aliases:SYNC_CLK</p></li>
+<li><p>D +, D - is differential signal .</p></li>
+</ol>
+<p>we assumed that the device mounted on the bus has one Master and two Slaves.</p>
+<p><span>Local Clock Counter &amp; SYNC_CLK</span></p>
+<ul>
+<li><p>Local Clock Counter , Each device has a local clock counter. The timing granularity is 100us.</p></li>
+<li><p>SYNC_CLK,The device on BAN bus uses clock line to complete clock synchronization. Master’s timer generates synchronization pulse, Slave’scaptures synchronized pulse to complete synchronization.</p></li>
+</ul>
+<p><span>Synchronization process</span></p>
+<ul>
+<li><p>a. master and slave power on and initialize peripherals.</p></li>
+<li><p>b. master starts sending square wave signals,at The first rising edge of square wave signal:</p>
+<ol>
+<li><p>The master starts Master’s Local Clock Counter(MLCC).</p></li>
+<li><p>Slave captures this rising edge at the same time.Then start Slave’s Local Clock Counter(SLCC).</p></li>
+<li><p>The delay of the rising edge of the clock line transmission can be neglected, So we think that MLCC and SLCC start counting at the same time.</p></li>
+</ol></li>
+<li><p>c. Slave calibrates SLCC at each subsequent SYNC_CLK rising edge.</p></li>
+</ul>
+<div class="figure">
+<img src="img/abstim" alt="BAN " width="226" />
+<p class="caption">BAN <span data-label="Overview"></span></p>
+</div>
+<p><span>Clock Difference Calibration</span></p>
+<p>SYNC_CLK is produced by Master with fixed period and precise time.Let’s take a period of 16 milliseconds for example.</p>
+<p>MLLC and SLLC start counter at the sametime(first SYNC_CLK rising edge). Their timing granularity is small, 100 microseconds.</p>
+<p>So when the system runs, there are two counts on each device, the Local Clock Count(Every 100 microseconds plus 1) and the SYNC_CLK Count(Every 16 milliseconds plus 160).Slave calibrates SLCC at each subsequent SYNC_CLK rising edge by Make those two counts the same.</p>
+<p><span>Clock Difference Calibration</span></p>
+<div class="figure">
+<img src="img/flow" alt="BAN " width="377" />
+<p class="caption">BAN <span data-label="Overview"></span></p>
+</div>
+<p><span>Demo implementation</span></p>
+<p>The following is the demo wiring and structure：</p>
+<div class="figure">
+<img src="img/demo0" alt="demo" width="377" />
+<p class="caption">demo<span data-label="Overview"></span></p>
+</div>
+<h1 id="workflow">workflow</h1>
+<p><span>Demo workflow</span></p>
+<ol>
+<li><p>Master and Slave Power on。 Peripheral Driver Initialization</p></li>
+<li><p>The Master sends a synchronization command, when ensuring that the slave is online:</p>
+<ul>
+<li><p>a.start timer2 to Generating Pulse Square Wave for synchronous。</p></li>
+<li><p>b. start timer3 for MLCC(Master Local Clock Counter).</p></li>
+</ul></li>
+<li><p>When Slave receives a synchronization command from Master, and Slave captures the first rising edge of SYNC_CLK:</p>
+<ul>
+<li><p>a. start timer3 for SLCC(Slave Local Clock Counter).</p></li>
+<li><p>b. Continue to capture the rising edge.</p></li>
+</ul></li>
+</ol>
+<p><span>Demo Workflow: Synchronize details</span></p>
+<p>local_tm_t is the type of time described in Master and Slave code:</p>
+<pre><code>typedef struct local_time_struct{
+ unsigned char sec:7;   //second
+ unsigned char min:7;   //min
+ unsigned char hour:5;  //hour
+ unsigned int  day;     //day
+ unsigned int  jiffies; //LCC
+ unsigned int  jiffies_pwm;   //SYNC_CLK counter
+} local_tm_t;</code></pre>
+<p><span>Slave Rising Edge Capture Interrupt</span></p>
+<p>tick_sync is called every 8ms to synchronize the local timestamp:</p>
+<pre><code>/* every 8ms 80*100us  */
+void tick_sync(void)
+{
+  if( dev.local_tm.jiffies_pwm + 80 &lt; 10000  ){
+  dev.local_tm.jiffies_pwm = dev.local_tm.jiffies_pwm  + 80;
+  }
+  if( dev.local_tm.jiffies_pwm + 80 &gt;= 10000  ){
+    dev.evt.sec_need_update=1;
+    dev.local_tm.jiffies_pwm = 80 - (10000 - dev.local_tm.jiffies_pwm);
+  }
+  dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//synchronous
+}</code></pre>
+<p><span>Synchronize details:test point</span></p>
+<p>Enter this code every 100us：</p>
+<pre><code>/*
+ enter this code  every 100us。
+*/
+void Tick(void)
+{
+  dev.local_tm.jiffies ++;
+  if( dev.local_tm.jiffies % 80 == 0){
+   //GPIO A5 for compare.
+   HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,1-HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_5));
+ }
+  /* one second passed */
+  if(dev.local_tm.jiffies &gt;= 10000 ){
+   dev.local_tm.jiffies  = 0;
+ }
+}</code></pre>
+<p>Here the slave GPIOA5 has square wave output relative to the clock synchronization line. It’s a test point.</p>
+<h1 id="test-data">TEST Data</h1>
+<p><span>Waveform: Unsynchronized</span></p>
+<p>Let:</p>
+<ul>
+<li><p>The local clock inverts the GPIOA5 level state every 8ms. This test channel is marked CH_LOCAL.</p></li>
+<li><p>The synchronous line generates a synchronous square wave with a half period of 8ms from the Master. This test channel is marked CH_SYNC.</p></li>
+<li><p>In the interrupt processing function of the slave to capture the rising edge of the synchronization line, the clock is not synchronized, that is to say, the following code is commented out:</p>
+<pre><code>//dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//synchronize code
+  </code></pre></li>
+</ul>
+<p>The following screenshots show the unsynchronized screenshots:</p>
+<p><span>Waveform: Unsynchronized</span></p>
+<p>Unsynchronized waveform 1[nosyncwave1]：</p>
+<div class="figure">
+<img src="img/nosync1" alt="nosync1" width="377" />
+<p class="caption">nosync1<span data-label="report"></span></p>
+</div>
+<p><span>Waveform: Unsynchronized</span></p>
+<p>Unsynchronized waveform 2：</p>
+<div class="figure">
+<img src="img/nosync2" alt="nosync2" width="377" />
+<p class="caption">nosync2<span data-label="report"></span></p>
+</div>
+<p><span>Waveform: Unsynchronized</span></p>
+<p>Unsynchronized waveform 3：</p>
+<div class="figure">
+<img src="img/nosync3" alt="nosync3" width="377" />
+<p class="caption">nosync3<span data-label="report"></span></p>
+</div>
+<p><span>Waveform: Unsynchronized</span></p>
+<p>Unsynchronized waveform 4：</p>
+<div class="figure">
+<img src="img/nosync4" alt="nosync4" width="377" />
+<p class="caption">nosync4<span data-label="report"></span></p>
+</div>
+<p><span>Some explanations of unsynchronized waveforms</span></p>
+<p>Return this document to unsynchronized waveform 1 ( [nosyncwave1]) and turn the page with the right key of the keyboard direction key (from unsynchronized waveform 1 to unsynchronized waveform 4). At this time, the animation effect on the screen can restore the appearance of the oscilloscope at that time.</p>
+<p>Because the local clock is not synchronized, each difference accumulates, resulting in such a dynamic effect.</p>
+<p><span>Waveform: Synchronization </span> Let:</p>
+<ul>
+<li><p>The local clock inverts the GPIOA5 level state every 8ms. This test channel is marked CH_LOCAL.</p></li>
+<li><p>The synchronous line generates a synchronous square wave with a half period of 8ms from the Master. This test channel is marked CH_SYNC.</p></li>
+<li><p>In the interrupt processing function of the slave capturing the rising edge of the synchronization line, the clock is synchronized, that is to say, the following code is active:</p>
+<pre><code>dev.local_tm.jiffies = dev.local_tm.jiffies_pwm;		//synchronize code
+  </code></pre></li>
+</ul>
+<p>The following screenshots show the screenshots in the case of synchronization.</p>
+<p><span>Waveform: Synchronization</span></p>
+<p>synchronized waveform :</p>
+<div class="figure">
+<img src="img/sync" alt="report jiffies" width="377" />
+<p class="caption">report jiffies<span data-label="report"></span></p>
+</div>
+<p><span>Waveform: Synchronization</span></p>
+<p>Since the rising edge of each synchronization line is captured by slave computer, synchronization interrupt will be triggered. In interrupt processing, the local clock error of each cycle will be eliminated.</p>
+<p>So the synchronized waveform looks fixed and the phase is relatively consistent. But:</p>
+<p>If we amplify the size of the oscilloscope, we will find that there are difference. The following are some synchronization delay. The size of the oscilloscope is already 50us. We are concerned about the synchronization time.</p>
+<p><span>Waveform: Synchronization</span></p>
+<p>Synchronization delay:</p>
+<div class="figure">
+<img src="img/mis1" alt="Synchronization delay1" width="377" />
+<p class="caption">Synchronization delay1<span data-label="report"></span></p>
+</div>
+<p><span>Synchronization delay</span></p>
+<p>Synchronization delay:</p>
+<div class="figure">
+<img src="img/mis1" alt="Synchronization delay1" width="377" />
+<p class="caption">Synchronization delay1<span data-label="report"></span></p>
+</div>
+<p><span>Synchronization delay</span></p>
+<p>Synchronization delay:</p>
+<div class="figure">
+<img src="img/mis2" alt="Synchronization delay2" width="377" />
+<p class="caption">Synchronization delay2<span data-label="report"></span></p>
+</div>
+<p><span>Synchronization delay</span></p>
+<p>Synchronization delay:</p>
+<div class="figure">
+<img src="img/mis3" alt="Synchronization delay3" width="377" />
+<p class="caption">Synchronization delay3<span data-label="report"></span></p>
+</div>
+<p><span>Synchronization delay</span></p>
+<div class="figure">
+<img src="img/delay" alt="delay" width="264" />
+<p class="caption">delay<span data-label="report"></span></p>
+</div>
+<p>As can be seen from the figure above, the maximum phase difference between CH_LOCAL and CH_SYNC is -3.771 -（-104.3） = 100.529us when sampling 4.155k times.</p>
+<p><span>summary</span></p>
+<p>Data transmission through serial ports can cause some delays (although there is no blocking at the time of sending, receiving in the interrupt, reading registers directly). The baudrate we used in this example is 115200*2.</p>
+<p>Software-only CRC verification will inevitably lead to a certain delay. If it is necessary to verify, the driver of CRC hardware peripherals should be realized in this project.</p>
+<p>The error of demo synchronization has been tested many times, among which there are transformed master-slave roles, and the maximum error is less than 500 us. The most common is within 300us.</p>
+<p>The test code logic is not complex, real-time processing is in the interrupt context, and STM32F4 uses Cortex M4’s Nested Vectored Interrupt Controller (NVIC) real-time is very high, there should be little optimization space.</p>

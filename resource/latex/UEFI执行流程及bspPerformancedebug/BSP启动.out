@@ -1,0 +1,32 @@
+<<<<<<< HEAD:resource/UEFI执行流程及bspPerformancedebug/BSP启动.out
+=======
+\BOOKMARK [0][-]{chapter.1}{Bsp\040Performance\040Debug}{}% 1
+\BOOKMARK [1][-]{section.1.1}{思路}{chapter.1}% 2
+\BOOKMARK [2][-]{subsection.1.1.1}{控制硬件及其参数配置不变}{section.1.1}% 3
+\BOOKMARK [2][-]{subsection.1.1.2}{kernel 配置}{section.1.1}% 4
+\BOOKMARK [2][-]{subsection.1.1.3}{版本升级因素}{section.1.1}% 5
+\BOOKMARK [1][-]{section.1.2}{本文必备的uefi基础}{chapter.1}% 6
+\BOOKMARK [2][-]{subsection.1.2.1}{uefi 组件}{section.1.2}% 7
+\BOOKMARK [2][-]{subsection.1.2.2}{xbl\040region}{section.1.2}% 8
+\BOOKMARK [2][-]{subsection.1.2.3}{uefi 执行流程}{section.1.2}% 9
+\BOOKMARK [1][-]{section.1.3}{代码位置以及log片段介绍}{chapter.1}% 10
+\BOOKMARK [2][-]{subsection.1.3.1}{UEFI Start 之前的log}{section.1.3}% 11
+\BOOKMARK [2][-]{subsection.1.3.2}{xbl\040loader}{section.1.3}% 12
+\BOOKMARK [2][-]{subsection.1.3.3}{XBL\040core}{section.1.3}% 13
+\BOOKMARK [2][-]{subsection.1.3.4}{BDS}{section.1.3}% 14
+\BOOKMARK [2][-]{subsection.1.3.5}{ABL/linuxloader\040}{section.1.3}% 15
+\BOOKMARK [2][-]{subsection.1.3.6}{ dmesg log 中挂接根文件系统开始init 进程的标志 }{section.1.3}% 16
+\BOOKMARK [1][-]{section.1.4}{几种log的分析}{chapter.1}% 17
+\BOOKMARK [2][-]{subsection.1.4.1}{dmesg}{section.1.4}% 18
+\BOOKMARK [2][-]{subsection.1.4.2}{Other\040Kernel\040part}{section.1.4}% 19
+\BOOKMARK [2][-]{subsection.1.4.3}{uefi\040log}{section.1.4}% 20
+\BOOKMARK [2][-]{subsection.1.4.4}{Event\040log}{section.1.4}% 21
+\BOOKMARK [1][-]{section.1.5}{在uefi中打印时间戳}{chapter.1}% 22
+\BOOKMARK [0][-]{chapter.2}{附录}{}% 23
+\BOOKMARK [1][-]{section.2.1}{附录 xbl loader info}{chapter.2}% 24
+\BOOKMARK [1][-]{section.2.2}{附录 关键代码}{chapter.2}% 25
+\BOOKMARK [2][-]{subsection.2.2.1}{boot_config_process_bl\040\040}{section.2.2}% 26
+\BOOKMARK [2][-]{subsection.2.2.2}{boot_configuration_table_entry\040}{section.2.2}% 27
+\BOOKMARK [2][-]{subsection.2.2.3}{BdsEntry}{section.2.2}% 28
+\BOOKMARK [2][-]{subsection.2.2.4}{PlatformBdsInitEx}{section.2.2}% 29
+>>>>>>> 48b96e02581776076d4b9317a8752fb7ef9a5273:resource/latex/UEFI执行流程及bspPerformancedebug/BSP启动.out
