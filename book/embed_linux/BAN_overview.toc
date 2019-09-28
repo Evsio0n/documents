@@ -1,7 +1,3 @@
-\contentsline {section}{\numberline {1}Overview}{2}{section.1}
-\contentsline {subsection}{\numberline {1.1}CLK}{2}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}RTC}{2}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}UART}{3}{subsection.1.3}
-\contentsline {section}{\numberline {2}Introduce}{4}{section.2}
-\contentsline {subsection}{\numberline {2.1}同步流程}{4}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}结语}{4}{subsection.2.2}
+\contentsline {chapter}{\numberline {1}Device Tree}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}在kernel启动时}{2}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}setup\_machine\_fdt}{2}{subsection.1.1.1}

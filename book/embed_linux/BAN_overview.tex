@@ -1,6 +1,4 @@
-\documentclass [a4paper,10pt,oneside] {article}
-\usepackage[colorlinks,linkcolor=gray,anchorcolor=black,citecolor=blue,filecolor=cyan,menucolor=gray]{hyperref}
-\usepackage{hyperref}
+\documentclass[a4paper,12pt,oneside]{book}
 \usepackage{xeCJK}
 \usepackage{graphics}
 \usepackage{epsfig}
@@ -13,23 +11,21 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{tikz}
+\usepackage[colorlinks,linkcolor=gray,anchorcolor=black,citecolor=blue,filecolor=cyan,menucolor=gray]{hyperref}
 \definecolor{mygray}{rgb}{0.3,0.3,0.3}
 \definecolor{codegreen}{rgb}{0.8,0.8,0.8}
 \vspace{50pt}%调整表格行高
 \linespread{1.30}%行间距
-\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1.5cm}
+\geometry{a4paper,left=2cm,right=2cm,top=2cm,bottom=2cm}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
 
 %设置字体
-%\setmainfont{STKAITI.TTF}
+%\setmainfont{bkai00mp.ttf}
 %\setmainfont{Noto Sans CJK JP Thin}
 \setmainfont{Ubuntu}
-%\setCJKmainfont{SimSun} % 语义和语法同fontspec
-%\setCJKsansfont{SimHei}
-%\setCJKmonofont{SimSun}
-
+\setCJKmainfont{SimHei} % 语义和语法同fontspec
 
 \makeatletter
 
@@ -47,11 +43,12 @@
 	commentstyle=\color{codegreen},
 	frame=shadowbox,
 	escapeinside=``,
-	tabsize=4,
+	tabsize=2,
 	framextopmargin=1pt,framexbottommargin=1pt,abovecaptionskip=-1pt,belowcaptionskip=1pt,
-  xleftmargin=3em,xrightmargin=3em,
+  xleftmargin=4em,xrightmargin=4em,
 	language=C
 }
+
 \begin{document}
 
 
@@ -67,8 +64,10 @@
 \pagenumbering{roman}
 \tableofcontents
 \pagenumbering{arabic}
-\include{chap/}
+
 \include{chap/intro}
 \include{chap/other}
+\include{chap/devicetree}
+
 
 \end{document}

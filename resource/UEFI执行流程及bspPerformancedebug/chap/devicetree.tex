@@ -1,0 +1,176 @@
+\chapter{Device Tree}
+
+\section{在kernel启动时}
+
+在 kernel 的 main.c 中的 setup\_arch ，在设置cpu 后， 
+进行设备树的 设置， 如果 返回 NULL 
+则会去尝试解析  tags.
+\begin{lstlisting}
+mdesc = setup_machine_fdt(__atags_pointer);
+if (!mdesc)
+	mdesc = setup_machine_tags(__atags_pointer, __machine_arch_type);
+    machine_desc = mdesc;
+	machine_name = mdesc->name;
+\end{lstlisting}
+
+
+
+接下来的 一些 文字我希望分析 启动过程中 和 device tree 相关的事情。现在看来 是要 和 
+耗上了。
+
+
+
+
+从注释上看 这个函数是要在  dtb 传入 内核的时候，来根据dtb 做一些相应设置的。  
+
+
+在一开始 ，  如果发现 dt\_phys 为空， 即没有 dtb 传递进来， 那么，直接返回NULL , 返回后会又 tags 的 方法去 用 tags 的 方法进行设置。 
+\begin{lstlisting}
+early_init_dt_verify(phys_to_virt(dt_phys)
+\end{lstlisting}
+上面的 code 先 验证 device tree 是不是有效。 然后用  dtb 的 虚拟地址 赋值为 \label{initial\_boot\_params} .
+
+
+
+
+
+接下来：
+
+\begin{lstlisting}
+
+static const void * __init arch_get_next_mach(const char *const **match)
+{
+	static const struct machine_desc *mdesc = __arch_info_begin;
+	const struct machine_desc *m = mdesc;
+
+	if (m >= __arch_info_end)
+		return NULL;
+
+	mdesc++;
+	*match = m->dt_compat;
+	return m;
+}
+
+
+mdesc = of_flat_dt_match_machine(mdesc_best, arch_get_next_mach);
+\end{lstlisting}
+
+of\_flat\_dt\_match\_machine从 表中找到 匹配的 machine . 传入的参数是 :
+\begin{itemize}
+    \item default\_match:  这个位置传入的是 mdesc\_best  如果没有在匹配表中找到 匹配的，就会用这个
+    返回。
+    \item get\_next\_compat : 传入的是arch\_get\_next\_mach  回调函数， 这个回调函数
+    用来找到下一个 合适的 匹配表。
+    
+\end{itemize}
+
+
+arch\_get\_next\_mach 中 \_\_arch\_info\_begin 到 \_\_arch\_info\_end 依次 返回machine\_desc 的 dt\_compat
+成员。那么 这个区段 究竟 存了些什么， 谁 存的 呢？ 接下来 就要把 这件事情搞得很明白。
+
+
+在链接脚本中，存在这样的区段：
+\begin{lstlisting}
+    .init.arch.info : {
+        __arch_info_begin = .;
+        *(.arch.info.init)
+        __arch_info_end = .;
+    }  
+\end{lstlisting}
+
+从这里可以得知， 为了进行接下来的研究， 需要找到  把 attribute 设置为 在 section ".arch.info.init" 的代码。
+
+而 这段代码为 :
+\begin{lstlisting}
+    arch/arm/include/asm/mach/arch.h
+
+    /*
+ * Set of macros to define architecture features.  This is built into
+ * a table by the linker.
+ */
+#define MACHINE_START(_type,_name)			\
+static const struct machine_desc __mach_desc_##_type	\
+ __used							\
+ __attribute__((__section__(".arch.info.init"))) = {	\
+	.nr		= MACH_TYPE_##_type,		\
+	.name		= _name,
+
+#define MACHINE_END				\
+};
+
+#define DT_MACHINE_START(_name, _namestr)		\
+static const struct machine_desc __mach_desc_##_name	\
+ __used							\
+ __attribute__((__section__(".arch.info.init"))) = {	\
+	.nr		= ~0,				\
+	.name		= _namestr,
+
+#endif
+
+\end{lstlisting}
+
+
+
+在 i.mx6ull 中 有：
+\begin{lstlisting}
+    arch/arm/mach-imx/mach-imx6ul.c :
+
+    static const char *imx6ul_dt_compat[] __initconst = {
+        "fsl,imx6ul",
+        "fsl,imx6ull",
+        NULL,
+    };
+    
+    DT_MACHINE_START(IMX6UL, "Freescale i.MX6 Ultralite (Device Tree)")
+        .map_io		= imx6ul_map_io,
+        .init_irq	= imx6ul_init_irq,
+        .init_machine	= imx6ul_init_machine,
+        .init_late	= imx6ul_init_late,
+        .dt_compat	= imx6ul_dt_compat,
+    MACHINE_END
+      
+\end{lstlisting}
+
+
+看到这些后， 我们返回来 分析 of\_flat\_dt\_match\_machine 中的 逻辑。dt\_root 代表了
+设备树的根节点。   接下来 ， 依次 从 .arch.info.init 段中，取出 machine\_desc 结构，然后 
+提取出 其中的 dt\_compat 成员 和 传入的dtb 中的 比对。 
+
+具体的匹配过程：
+
+\begin{lstlisting}
+
+    /**
+    * of_fdt_match - Return true if node matches a list of compatible values
+    */
+   int of_fdt_match(const void *blob, unsigned long node,
+                    const char *const *compat)
+   {
+       unsigned int tmp, score = 0;
+   
+       if (!compat)
+           return 0;
+   
+       while (*compat) {
+           tmp = of_fdt_is_compatible(blob, node, *compat);
+           if (tmp && (score == 0 || (tmp < score)))
+               score = tmp;
+           compat++;
+       }
+   
+       return score;
+   }
+
+/**
+ * of_flat_dt_match - Return true if node matches a list of compatible values
+ */
+int __init of_flat_dt_match(unsigned long node, const char *const *compat)
+{
+	return of_fdt_match(initial_boot_params, node, compat);
+}
+\end{lstlisting}
+
+还记得 initial\_boot\_params 吗？ 不记得请 \ref{点击}  , of\_flat\_dt\_match 根据 compat 从跟节点 
+判断 dtb 中的 compatible 字段 是否最合适。 这里判断是不是合适 使用了 score 的方法， 当完全匹配时，
+score 为 1  并返回; 否则
+

@@ -1,0 +1,460 @@
+\chapter{Device Tree}
+
+\section{在kernel启动时}
+
+在 kernel 的 main.c 中的 setup\_arch ，在设置cpu 后， 
+进行设备树的 设置， 如果 setup\_machine\_fdt 返回 NULL 
+则会去尝试解析  tags.
+\begin{lstlisting}
+mdesc = setup_machine_fdt(__atags_pointer);
+if (!mdesc)
+	mdesc = setup_machine_tags(__atags_pointer, __machine_arch_type);
+    machine_desc = mdesc;
+	machine_name = mdesc->name;
+\end{lstlisting}
+
+
+
+
+接下来的 一些 文字我希望分析 启动过程中 和 device tree 相关的事情。现在看来 是要 和 setup\_machine\_fdt
+耗上了。
+
+
+\subsection{setup\_machine\_fdt}
+
+\begin{lstlisting}
+    /**
+    * setup_machine_fdt - Machine setup when an dtb was passed to the kernel
+    * @dt_phys: physical address of dt blob
+    *
+    * If a dtb was passed to the kernel in r2, then use it to choose the
+    * correct machine_desc and to setup the system.
+    */
+   const struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
+   {
+       const struct machine_desc *mdesc, *mdesc_best = NULL;
+   
+   #ifdef CONFIG_ARCH_MULTIPLATFORM
+       DT_MACHINE_START(GENERIC_DT, "Generic DT based system")
+       MACHINE_END
+   
+       mdesc_best = &__mach_desc_GENERIC_DT;
+   #endif
+   
+       if (!dt_phys || !early_init_dt_verify(phys_to_virt(dt_phys)))
+           return NULL;
+   
+       mdesc = of_flat_dt_match_machine(mdesc_best, arch_get_next_mach);
+   
+       if (!mdesc) {
+           const char *prop;
+           int size;
+           unsigned long dt_root;
+   
+           early_print("\nError: unrecognized/unsupported "
+                   "device tree compatible list:\n[ ");
+   
+           dt_root = of_get_flat_dt_root();
+           prop = of_get_flat_dt_prop(dt_root, "compatible", &size);
+           while (size > 0) {
+               early_print("'%s' ", prop);
+               size -= strlen(prop) + 1;
+               prop += strlen(prop) + 1;
+           }
+           early_print("]\n\n");
+   
+           dump_machine_table(); /* does not return */
+       }
+   
+       /* We really don't want to do this, but sometimes firmware provides buggy data */
+       if (mdesc->dt_fixup)
+           mdesc->dt_fixup();
+   
+       early_init_dt_scan_nodes();
+   
+       /* Change machine number to match the mdesc we're using */
+       __machine_arch_type = mdesc->nr;
+   
+       return mdesc;
+   }
+   
+\end{lstlisting}
+
+
+从注释上看 这个函数是要在  dtb 传入 内核的时候，来根据dtb 做一些相应设置的。  
+
+
+在一开始 ，  如果发现 dt\_phys 为空， 即没有 dtb 传递进来， 那么，直接返回NULL , 返回后会又 tags 的 方法去 用 tags 的 方法进行设置。 
+\begin{lstlisting} 
+early_init_dt_verify(phys_to_virt(dt_phys)
+
+bool __init early_init_dt_verify(void *params)
+{
+	if (!params)
+		return false;
+
+	/* check device tree validity */
+	if (fdt_check_header(params))
+		return false;
+
+	/* Setup flat device-tree pointer */
+	initial_boot_params = params;
+	of_fdt_crc32 = crc32_be(~0, initial_boot_params,
+				fdt_totalsize(initial_boot_params));
+	return true;
+}
+
+\end{lstlisting}
+上面的 code 先 验证 device tree 是不是有效。 然后用  dtb 的 虚拟地址 赋值为initial\_boot\_params \label{a1} .
+
+
+
+\subsubsection{of\_flat\_dt\_match\_machine}
+
+接下来：
+
+\begin{lstlisting}
+
+static const void * __init arch_get_next_mach(const char *const **match)
+{
+	static const struct machine_desc *mdesc = __arch_info_begin;
+	const struct machine_desc *m = mdesc;
+
+	if (m >= __arch_info_end)
+		return NULL;
+
+	mdesc++;
+	*match = m->dt_compat;
+	return m;
+}
+
+
+mdesc = of_flat_dt_match_machine(mdesc_best, arch_get_next_mach);
+\end{lstlisting}
+
+of\_flat\_dt\_match\_machine从 表中找到 匹配的 machine . 传入的参数是 :
+\begin{itemize}
+    \item default\_match:  这个位置传入的是 mdesc\_best  如果没有在匹配表中找到 匹配的，就会用这个
+    返回。
+    \item get\_next\_compat : 传入的是arch\_get\_next\_mach  回调函数， 这个回调函数
+    用来找到下一个 合适的 匹配表。
+    
+\end{itemize}
+
+
+arch\_get\_next\_mach 中 \_\_arch\_info\_begin 到 \_\_arch\_info\_end 依次 返回machine\_desc 的 dt\_compat
+成员。那么 这个区段 究竟 存了些什么， 谁 存的 呢？ 接下来 就要把 这件事情搞得很明白。
+
+
+在链接脚本中，存在这样的区段：
+\begin{lstlisting}
+    .init.arch.info : {
+        __arch_info_begin = .;
+        *(.arch.info.init)
+        __arch_info_end = .;
+    }  
+\end{lstlisting}
+
+从这里可以得知， 为了进行接下来的研究， 需要找到  把 attribute 设置为 在 section ".arch.info.init" 的代码。
+
+而 这段代码为 :
+\begin{lstlisting}
+    arch/arm/include/asm/mach/arch.h
+
+    /*
+ * Set of macros to define architecture features.  This is built into
+ * a table by the linker.
+ */
+#define MACHINE_START(_type,_name)			\
+static const struct machine_desc __mach_desc_##_type	\
+ __used							\
+ __attribute__((__section__(".arch.info.init"))) = {	\
+	.nr		= MACH_TYPE_##_type,		\
+	.name		= _name,
+
+#define MACHINE_END				\
+};
+
+#define DT_MACHINE_START(_name, _namestr)		\
+static const struct machine_desc __mach_desc_##_name	\
+ __used							\
+ __attribute__((__section__(".arch.info.init"))) = {	\
+	.nr		= ~0,				\
+	.name		= _namestr,
+
+#endif
+
+\end{lstlisting}
+
+
+
+在 i.mx6ull 中 有：
+\begin{lstlisting}
+    arch/arm/mach-imx/mach-imx6ul.c :
+
+    static const char *imx6ul_dt_compat[] __initconst = {
+        "fsl,imx6ul",
+        "fsl,imx6ull",
+        NULL,
+    };
+    
+    DT_MACHINE_START(IMX6UL, "Freescale i.MX6 Ultralite (Device Tree)")
+        .map_io		= imx6ul_map_io,
+        .init_irq	= imx6ul_init_irq,
+        .init_machine	= imx6ul_init_machine,
+        .init_late	= imx6ul_init_late,
+        .dt_compat	= imx6ul_dt_compat,
+    MACHINE_END
+      
+\end{lstlisting}
+
+
+看到这些后， 我们返回来 分析 of\_flat\_dt\_match\_machine 中的 逻辑。dt\_root 代表了
+设备树的根节点。   接下来 ， 依次 从 .arch.info.init 段中，取出 machine\_desc 结构，然后 
+提取出 其中的 dt\_compat 成员 和 传入的dtb 中的 比对。 
+
+具体的匹配过程：
+
+\begin{lstlisting}
+
+    /**
+    * of_fdt_match - Return true if node matches a list of compatible values
+    */
+   int of_fdt_match(const void *blob, unsigned long node,
+                    const char *const *compat)
+   {
+       unsigned int tmp, score = 0;
+   
+       if (!compat)
+           return 0;
+   
+       while (*compat) {
+           tmp = of_fdt_is_compatible(blob, node, *compat);
+           if (tmp && (score == 0 || (tmp < score)))
+               score = tmp;
+           compat++;
+       }
+   
+       return score;
+   }
+
+/**
+ * of_flat_dt_match - Return true if node matches a list of compatible values
+ */
+int __init of_flat_dt_match(unsigned long node, const char *const *compat)
+{
+	return of_fdt_match(initial_boot_params, node, compat);
+}
+
+int of_fdt_is_compatible(const void *blob,
+		      unsigned long node, const char *compat)
+{
+	const char *cp;
+	int cplen;
+	unsigned long l, score = 0;
+
+	cp = fdt_getprop(blob, node, "compatible", &cplen);
+	if (cp == NULL)
+		return 0;
+	while (cplen > 0) {
+		score++;
+		if (of_compat_cmp(cp, compat, strlen(compat)) == 0)
+			return score;
+		l = strlen(cp) + 1;
+		cp += l;
+		cplen -= l;
+	}
+
+	return 0;
+}
+
+\end{lstlisting}
+
+还记得 initial\_boot\_params 吗？ 不记得请 initial\_boot\_params \ref{a1}  , of\_flat\_dt\_match 根据 compat 从跟节点 
+判断 dtb 中的 compatible 字段 是否最合适。 这里判断是不是合适 使用了 score 的方法， 当完全匹配时，
+score 为 1  并返回; 否则就是字符串部分匹配，返回非零值。 
+
+
+所以 到这里，我们就可以明白， of\_flat\_dt\_match\_machine  返回了 一个 在  \_\_arch\_info\_begin 到 \_\_arch\_info\_end  中的 最合适的 struct machine\_desc
+结构。 
+
+
+\subsubsection{early\_init\_dt\_scan\_nodes}
+
+\begin{lstlisting}
+    void __init early_init_dt_scan_nodes(void)
+    {
+        /* Retrieve various information from the /chosen node */
+        of_scan_flat_dt(early_init_dt_scan_chosen, boot_command_line);
+    
+        /* Initialize {size,address}-cells info */
+        of_scan_flat_dt(early_init_dt_scan_root, NULL);
+    
+        /* Setup memory, calling early_init_dt_add_memory_arch */
+        of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+     }    
+\end{lstlisting}
+
+
+
+\begin{lstlisting}
+    
+
+/**
+ * of_scan_flat_dt - scan flattened tree blob and call callback on each.
+ * @it: callback function
+ * @data: context data pointer
+ *
+ * This function is used to scan the flattened device-tree, it is
+ * used to extract the memory information at boot before we can
+ * unflatten the tree
+ */
+int __init of_scan_flat_dt(int (*it)(unsigned long node,
+				     const char *uname, int depth,
+				     void *data),
+			   void *data)
+{
+	const void *blob = initial_boot_params;
+	const char *pathp;
+	int offset, rc = 0, depth = -1;
+
+        for (offset = fdt_next_node(blob, -1, &depth);
+             offset >= 0 && depth >= 0 && !rc;
+             offset = fdt_next_node(blob, offset, &depth)) {
+
+		pathp = fdt_get_name(blob, offset, NULL);
+		if (*pathp == '/')
+			pathp = kbasename(pathp);
+		rc = it(offset, pathp, depth, data);
+	}
+	return rc;
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}
+int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
+    int depth, void *data)
+{
+int l;
+const char *p;
+
+pr_debug("search \"chosen\", depth: %d, uname: %s\n", depth, uname);
+
+if (depth != 1 || !data ||
+(strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
+return 0;
+
+early_init_dt_check_for_initrd(node);
+
+/* Retrieve command line */
+p = of_get_flat_dt_prop(node, "bootargs", &l);
+if (p != NULL && l > 0)
+strlcpy(data, p, min((int)l, COMMAND_LINE_SIZE));
+
+/*
+* CONFIG_CMDLINE is meant to be a default in case nothing else
+* managed to set the command line, unless CONFIG_CMDLINE_FORCE
+* is set in which case we override whatever was found earlier.
+*/
+#ifdef CONFIG_CMDLINE
+#ifndef CONFIG_CMDLINE_FORCE
+if (!((char *)data)[0])
+#endif
+strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+#endif /* CONFIG_CMDLINE */
+
+pr_debug("Command line is: %s\n", (char*)data);
+
+/* break now */
+return 1;
+}
+
+
+\end{lstlisting}
+
+
+
+
+\begin{lstlisting}
+/**
+ * early_init_dt_scan_root - fetch the top level address and size cells
+ */
+int __init early_init_dt_scan_root(unsigned long node, const char *uname,
+				   int depth, void *data)
+{
+	const __be32 *prop;
+
+	if (depth != 0)
+		return 0;
+
+	dt_root_size_cells = OF_ROOT_NODE_SIZE_CELLS_DEFAULT;
+	dt_root_addr_cells = OF_ROOT_NODE_ADDR_CELLS_DEFAULT;
+
+	prop = of_get_flat_dt_prop(node, "#size-cells", NULL);
+	if (prop)
+		dt_root_size_cells = be32_to_cpup(prop);
+	pr_debug("dt_root_size_cells = %x\n", dt_root_size_cells);
+
+	prop = of_get_flat_dt_prop(node, "#address-cells", NULL);
+	if (prop)
+		dt_root_addr_cells = be32_to_cpup(prop);
+	pr_debug("dt_root_addr_cells = %x\n", dt_root_addr_cells);
+
+	/* break now */
+	return 1;
+}
+\end{lstlisting}
+
+
+
+\begin{lstlisting}
+ 
+/**
+* early_init_dt_scan_memory - Look for an parse memory nodes
+*/
+int __init early_init_dt_scan_memory(unsigned long node, const char *uname,
+                    int depth, void *data)
+{
+   const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
+   const __be32 *reg, *endp;
+   int l;
+
+   /* We are scanning "memory" nodes only */
+   if (type == NULL) {
+       /*
+        * The longtrail doesn't have a device_type on the
+        * /memory node, so look for the node called /memory@0.
+        */
+       if (!IS_ENABLED(CONFIG_PPC32) || depth != 1 || strcmp(uname, "memory@0") != 0)
+           return 0;
+   } else if (strcmp(type, "memory") != 0)
+       return 0;
+
+   reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
+   if (reg == NULL)
+       reg = of_get_flat_dt_prop(node, "reg", &l);
+   if (reg == NULL)
+       return 0;
+
+   endp = reg + (l / sizeof(__be32));
+
+   pr_debug("memory scan node %s, reg size %d,\n", uname, l);
+
+   while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
+       u64 base, size;
+
+       base = dt_mem_next_cell(dt_root_addr_cells, &reg);
+       size = dt_mem_next_cell(dt_root_size_cells, &reg);
+
+       if (size == 0)
+           continue;
+       pr_debug(" - %llx ,  %llx\n", (unsigned long long)base,
+           (unsigned long long)size);
+
+       early_init_dt_add_memory_arch(base, size);
+   }
+
+   return 0;
+}   
+\end{lstlisting}
